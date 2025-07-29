@@ -49,7 +49,7 @@ if st.button("Reflect with the Council") and selected_archetypes and journal:
     for key in selected_archetypes:
         st.markdown(f"### {archetypes[key]}")
         st.markdown(f"_{archetype_prompts[key]}_")
-        st.write(f"Response to your journal: "{journal}"\n(This is where the GPT response would go.)")
+        st.write(f'Response to your journal: "{journal}"\n(This is where the GPT response would go.)')
 
     st.markdown("---")
     st.subheader("🔍 Council Challenge:")
