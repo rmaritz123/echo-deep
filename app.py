@@ -1,8 +1,9 @@
 import streamlit as st
+from PIL import Image
 
 st.set_page_config(page_title="Echo Deep", layout="centered")
 
-# Config
+# === CONFIG ===
 settings = {
     "Campfire": "static/background_campfire.png",
     "Boardroom": "static/background_boardroom.png",
@@ -17,44 +18,43 @@ archetypes = {
     "The Serial Entrepreneur": "static/characters/entrepreneur.png"
 }
 
-# User Input
+# === USER CHOICES ===
 setting = st.selectbox("Choose Setting:", list(settings.keys()))
 selected_archetypes = st.multiselect("Choose Your Archetypes:", list(archetypes.keys()), default=list(archetypes.keys())[:3])
 
-# Background CSS (Streamlit static path fix)
-bg_path = f"/{settings[setting]}"
+# === DISPLAY BACKGROUND IMAGE ===
+bg_path = settings[setting]
+bg_img = Image.open(bg_path)
+st.image(bg_img, use_column_width=True)
+
+# === OPTIONAL STYLING ===
 st.markdown(
-    f"""
+    """
     <style>
-    .stApp {{
-        background-image: url('{bg_path}');
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        background-repeat: no-repeat;
-        color: #f4ecd8;
-        font-family: 'Georgia', serif;
-    }}
-    .block-container {{
+    .block-container {
         background-color: rgba(0, 0, 0, 0.6);
         padding: 2em;
         border-radius: 10px;
-    }}
-    h1 {{
+    }
+    h1 {
         text-align: center;
         font-size: 3em;
         color: #f4ecd8;
         margin-bottom: 1em;
-    }}
+    }
+    .stTextArea textarea {
+        background-color: #222;
+        color: #f4ecd8;
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Header
+# === HEADER ===
 st.markdown("<h1>ECHO DEEP</h1>", unsafe_allow_html=True)
 
-# Display Characters
+# === CHARACTER SELECTION ===
 if selected_archetypes:
     st.markdown("### Your Council:")
     cols = st.columns(len(selected_archetypes))
@@ -62,7 +62,7 @@ if selected_archetypes:
         with cols[i]:
             st.image(archetypes[name], caption=name, use_container_width=True)
 
-# Journal Input
+# === JOURNAL INPUT ===
 st.markdown("### Start Your Conversation")
 entry = st.text_area("Enter your message here...", height=150)
 
