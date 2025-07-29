@@ -2,55 +2,67 @@
 import streamlit as st
 import openai
 
-st.set_page_config(page_title="Echo Deep", layout="wide")
+st.set_page_config(page_title="Echo Deep", layout="centered")
 
-# --- Settings ---
-st.title("🔥 Echo Deep – Inner Dialogue Engine")
-
-settings = {
-    "campfire": "🔥 Campfire (Self-Reflection)",
-    "council": "🏛️ Council Room (Wisdom & Guidance)",
-    "boardroom": "🏢 Boardroom (Career & Business)",
-    "spaceship": "🚀 Spaceship (Futuristic Brainstorming)"
+# --- Header ---
+st.markdown("""
+<style>
+body {
+    background-color: #1c1f26;
+    color: #f4ecd8;
+    font-family: 'Georgia', serif;
 }
-
-archetypes = {
-    "headmaster": "🧙 The Headmaster – The Sage",
-    "investor": "💼 The Investor – The Executive Strategist",
-    "shadow": "🩸 The Shadow Self – The Inner Opposite",
-    "joker": "🎭 The Trickster – The Joker",
-    "builder": "🚀 The Builder – The Serial Entrepreneur"
+h1 {
+    color: #f4ecd8;
+    text-align: center;
 }
-
-archetype_prompts = {
-    "headmaster": "Wise, calm, long-term thinker. Asks reflective questions. Speaks in metaphors and stories.",
-    "investor": "Direct, pragmatic, and focused on ROI. Pushes for strategic thinking and results.",
-    "shadow": "Provocative, unsettling, exposes hidden fears and blind spots. Challenges core beliefs.",
-    "joker": "Witty, chaotic, breaks patterns. Uses humor and absurdity to challenge seriousness.",
-    "builder": "Energetic, optimistic, and always hunting for opportunity. Wants fast results and MVPs."
+select, textarea, input[type="text"] {
+    background-color: #f4ecd8;
+    color: #000000;
+    border-radius: 5px;
+    padding: 0.5em;
 }
+.stButton>button {
+    background-color: #6b4f3b;
+    color: #f4ecd8;
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 24px;
+}
+</style>
+""", unsafe_allow_html=True)
 
-# --- UI ---
-st.subheader("Choose Your Setting:")
-setting = st.selectbox("Scene:", list(settings.keys()), format_func=lambda x: settings[x])
+st.markdown("<h1>ECHO DEEP</h1>", unsafe_allow_html=True)
 
-st.subheader("Choose Up to 5 Archetypes:")
-selected_archetypes = st.multiselect(
-    "Archetypes:", list(archetypes.keys()), default=list(archetypes.keys())[:3],
-    format_func=lambda x: archetypes[x]
-)
+# --- Choose Setting ---
+st.subheader("Choose Setting")
+setting = st.selectbox("Select your setting", ["Campfire", "Boardroom", "Council Room", "Spaceship"])
 
-st.subheader("Write Your Journal Entry:")
-journal = st.text_area("What’s on your mind today?", height=200)
+# --- Choose Archetypes ---
+st.subheader("Choose Your Archetypes (Max 5)")
+archetypes = [
+    "The Wise Headmaster",
+    "The Billionaire Investor",
+    "The Shadow Self",
+    "The Joker",
+    "The Serial Entrepreneur"
+]
+selected_archetypes = st.multiselect("Select Archetypes", archetypes, default=archetypes[:3])
 
-if st.button("Reflect with the Council") and selected_archetypes and journal:
-    st.markdown("---")
-    st.subheader("Responses:")
-    for key in selected_archetypes:
-        st.markdown(f"### {archetypes[key]}")
-        st.markdown(f"_{archetype_prompts[key]}_")
-        st.write(f'Response to your journal: "{journal}"\n(This is where the GPT response would go.)')
+# --- Journal Entry ---
+st.subheader("Journal Entry")
+journal_entry = st.text_area("Write your thoughts here...", height=200)
 
-    st.markdown("---")
-    st.subheader("🔍 Council Challenge:")
-    st.write("Which voice irritated you the most — and why might that be the one you need to listen to?")
+# --- Submit Button ---
+if st.button("Reflect with the Council"):
+    if not selected_archetypes or not journal_entry:
+        st.warning("Please select at least one archetype and enter a journal entry.")
+    else:
+        st.markdown("---")
+        st.subheader("Council Responses")
+        for archetype in selected_archetypes:
+            st.markdown(f"### {archetype}")
+            st.write(f"*(Placeholder)* Insightful response to your journal entry: "{journal_entry}"")
+        st.markdown("---")
+        st.subheader("🔍 Council Challenge")
+        st.write("Which voice irritated you the most — and why might that be the one you need to listen to?")
