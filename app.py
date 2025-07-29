@@ -1,57 +1,70 @@
 
 import streamlit as st
-from PIL import Image
-import os
 
 st.set_page_config(page_title="Echo Deep", layout="centered")
 
-# Settings and archetypes
+# Config
 settings = {
-    "Campfire": "background_campfire.png",
-    "Boardroom": "background_boardroom.png",
-    "Spaceship": "background_spaceship.png"
+    "Campfire": "static/background_campfire.png",
+    "Boardroom": "static/background_boardroom.png",
+    "Spaceship": "static/background_spaceship.png"
 }
 
 archetypes = {
-    "The Wise Headmaster": "characters/headmaster.png",
-    "The Billionaire Investor": "characters/investor.png",
-    "The Shadow Self": "characters/shadow_self.png",
-    "The Joker": "characters/joker.png",
-    "The Serial Entrepreneur": "characters/entrepreneur.png"
+    "The Wise Headmaster": "static/characters/headmaster.png",
+    "The Billionaire Investor": "static/characters/investor.png",
+    "The Shadow Self": "static/characters/shadow_self.png",
+    "The Joker": "static/characters/joker.png",
+    "The Serial Entrepreneur": "static/characters/entrepreneur.png"
 }
 
-# Select setting
+# User Input
 setting = st.selectbox("Choose Setting:", list(settings.keys()))
-bg_image = settings[setting]
+selected_archetypes = st.multiselect("Choose Your Archetypes:", list(archetypes.keys()), default=list(archetypes.keys())[:3])
 
+# Background CSS
+bg_path = settings[setting]
 st.markdown(
-    f"""
+    f'''
     <style>
     .stApp {{
-        background-image: url('{bg_image}');
+        background-image: url('{bg_path}');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
+        color: #f4ecd8;
+        font-family: 'Georgia', serif;
+    }}
+    .block-container {{
+        background-color: rgba(0, 0, 0, 0.6);
+        padding: 2em;
+        border-radius: 10px;
+    }}
+    h1 {{
+        text-align: center;
+        font-size: 3em;
+        color: #f4ecd8;
+        margin-bottom: 1em;
     }}
     </style>
-    """,
+    ''',
     unsafe_allow_html=True
 )
 
-st.markdown("<h1 style='text-align: center; color: #f4ecd8;'>ECHO DEEP</h1>", unsafe_allow_html=True)
+# Header
+st.markdown("<h1>ECHO DEEP</h1>", unsafe_allow_html=True)
 
-# Select archetypes
-selected_archetypes = st.multiselect("Choose Your Archetypes:", list(archetypes.keys()), default=list(archetypes.keys())[:3])
+# Display Characters
+if selected_archetypes:
+    st.markdown("### Your Council:")
+    cols = st.columns(len(selected_archetypes))
+    for i, name in enumerate(selected_archetypes):
+        with cols[i]:
+            st.image(archetypes[name], caption=name, use_container_width=True)
 
-# Show characters
-cols = st.columns(5)
-for i, archetype in enumerate(selected_archetypes):
-    with cols[i]:
-        st.image(archetypes[archetype], caption=archetype, use_column_width=True)
-
-# Journal Entry
-st.subheader("Start your conversation:")
-entry = st.text_area("Enter your message...", height=150)
+# Journal Input
+st.markdown("### Start Your Conversation")
+entry = st.text_area("Enter your message here...", height=150)
 
 if st.button("Reflect with the Council"):
     if not selected_archetypes or not entry.strip():
