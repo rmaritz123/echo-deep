@@ -1,73 +1,66 @@
 
 import streamlit as st
+from PIL import Image
+import os
 
 st.set_page_config(page_title="Echo Deep", layout="centered")
 
-# --- Custom CSS Styling with Background Image ---
-st.markdown("""
-<style>
-body {
-    background-image: url('campfire_background.png');
-    background-size: cover;
-    background-position: center;
-    color: #f4ecd8;
-    font-family: 'Georgia', serif;
+# Settings and archetypes
+settings = {
+    "Campfire": "background_campfire.png",
+    "Boardroom": "background_boardroom.png",
+    "Spaceship": "background_spaceship.png"
 }
-h1 {
-    color: #f4ecd8;
-    text-align: center;
-    font-size: 3em;
-    margin-top: 0.5em;
-}
-label, .stSelectbox label, .stTextArea label {
-    font-size: 1.2em;
-    color: #f4ecd8;
-}
-.stButton>button {
-    background-color: #6b4f3b;
-    color: #f4ecd8;
-    font-weight: bold;
-    border-radius: 10px;
-    padding: 10px 24px;
-    margin-top: 20px;
-}
-.stTextArea textarea {
-    background-color: #f4ecd8;
-    color: #1c1f26;
-    border-radius: 10px;
-    padding: 10px;
-}
-</style>
-""", unsafe_allow_html=True)
 
-st.markdown("<h1>ECHO DEEP</h1>", unsafe_allow_html=True)
+archetypes = {
+    "The Wise Headmaster": "characters/headmaster.png",
+    "The Billionaire Investor": "characters/investor.png",
+    "The Shadow Self": "characters/shadow_self.png",
+    "The Joker": "characters/joker.png",
+    "The Serial Entrepreneur": "characters/entrepreneur.png"
+}
 
-# --- Settings ---
-setting = st.selectbox("Setting:", ["Campfire", "Boardroom", "Council Room", "Spaceship"])
+# Select setting
+setting = st.selectbox("Choose Setting:", list(settings.keys()))
+bg_image = settings[setting]
 
-# --- Archetypes ---
-archetypes = [
-    "The Wise Headmaster",
-    "The Billionaire Investor",
-    "The Shadow Self",
-    "The Joker",
-    "The Serial Entrepreneur"
-]
-selected = st.multiselect("Choose your archetypes:", archetypes, default=archetypes[:3])
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url('{bg_image}');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# --- Journal Input ---
+st.markdown("<h1 style='text-align: center; color: #f4ecd8;'>ECHO DEEP</h1>", unsafe_allow_html=True)
+
+# Select archetypes
+selected_archetypes = st.multiselect("Choose Your Archetypes:", list(archetypes.keys()), default=list(archetypes.keys())[:3])
+
+# Show characters
+cols = st.columns(5)
+for i, archetype in enumerate(selected_archetypes):
+    with cols[i]:
+        st.image(archetypes[archetype], caption=archetype, use_column_width=True)
+
+# Journal Entry
 st.subheader("Start your conversation:")
-entry = st.text_area("Enter your message...")
+entry = st.text_area("Enter your message...", height=150)
 
-# --- Simulate Council Response ---
 if st.button("Reflect with the Council"):
-    if not entry or not selected:
-        st.warning("Please provide a journal entry and select at least one archetype.")
+    if not selected_archetypes or not entry.strip():
+        st.warning("Please select archetypes and enter a message.")
     else:
         st.markdown("---")
         st.subheader("Council Responses")
-        for a in selected:
-            st.markdown(f"### {a}")
+        for name in selected_archetypes:
+            st.markdown(f"### {name}")
             st.write(f'*(Placeholder response)* "{entry}"')
         st.markdown("---")
         st.subheader("Council Challenge")
