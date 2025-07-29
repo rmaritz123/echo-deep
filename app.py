@@ -1,25 +1,27 @@
+
 import streamlit as st
-import openai
 
 st.set_page_config(page_title="Echo Deep", layout="centered")
 
-# --- Custom CSS Styling ---
+# --- Custom CSS Styling with Background Image ---
 st.markdown("""
 <style>
 body {
-    background-color: #1c1f26;
+    background-image: url('campfire_background.png');
+    background-size: cover;
+    background-position: center;
     color: #f4ecd8;
     font-family: 'Georgia', serif;
 }
 h1 {
     color: #f4ecd8;
     text-align: center;
+    font-size: 3em;
+    margin-top: 0.5em;
 }
-select, textarea, input[type="text"] {
-    background-color: #f4ecd8;
-    color: #000000;
-    border-radius: 5px;
-    padding: 0.5em;
+label, .stSelectbox label, .stTextArea label {
+    font-size: 1.2em;
+    color: #f4ecd8;
 }
 .stButton>button {
     background-color: #6b4f3b;
@@ -27,19 +29,23 @@ select, textarea, input[type="text"] {
     font-weight: bold;
     border-radius: 10px;
     padding: 10px 24px;
+    margin-top: 20px;
+}
+.stTextArea textarea {
+    background-color: #f4ecd8;
+    color: #1c1f26;
+    border-radius: 10px;
+    padding: 10px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# --- Title ---
 st.markdown("<h1>ECHO DEEP</h1>", unsafe_allow_html=True)
 
-# --- Choose Setting ---
-st.subheader("Choose Setting")
-setting = st.selectbox("Select your setting", ["Campfire", "Boardroom", "Council Room", "Spaceship"])
+# --- Settings ---
+setting = st.selectbox("Setting:", ["Campfire", "Boardroom", "Council Room", "Spaceship"])
 
-# --- Choose Archetypes ---
-st.subheader("Choose Your Archetypes (Max 5)")
+# --- Archetypes ---
 archetypes = [
     "The Wise Headmaster",
     "The Billionaire Investor",
@@ -47,22 +53,22 @@ archetypes = [
     "The Joker",
     "The Serial Entrepreneur"
 ]
-selected_archetypes = st.multiselect("Select Archetypes", archetypes, default=archetypes[:3])
+selected = st.multiselect("Choose your archetypes:", archetypes, default=archetypes[:3])
 
-# --- Journal Entry ---
-st.subheader("Journal Entry")
-journal_entry = st.text_area("Write your thoughts here...", height=200)
+# --- Journal Input ---
+st.subheader("Start your conversation:")
+entry = st.text_area("Enter your message...")
 
-# --- Reflect with Council ---
+# --- Simulate Council Response ---
 if st.button("Reflect with the Council"):
-    if not selected_archetypes or not journal_entry.strip():
-        st.warning("Please select at least one archetype and enter a journal entry.")
+    if not entry or not selected:
+        st.warning("Please provide a journal entry and select at least one archetype.")
     else:
         st.markdown("---")
         st.subheader("Council Responses")
-        for archetype in selected_archetypes:
-            st.markdown(f"### {archetype}")
-            st.write(f"*(Placeholder)* Insightful response to your journal entry: \"{journal_entry}\"")
+        for a in selected:
+            st.markdown(f"### {a}")
+            st.write(f"*(Placeholder response)* "{entry}"")
         st.markdown("---")
-        st.subheader("🔍 Council Challenge")
+        st.subheader("Council Challenge")
         st.write("Which voice irritated you the most — and why might that be the one you need to listen to?")
