@@ -68,7 +68,7 @@ if st.button("Reflect with the Council"):
         st.subheader("Council Responses")
         for a in selected:
             st.markdown(f"### {a}")
-            st.write(f"*(Placeholder response)* "{entry}"")
+            st.write(f'*(Placeholder response)* "{entry}"')
         st.markdown("---")
         st.subheader("Council Challenge")
         st.write("Which voice irritated you the most — and why might that be the one you need to listen to?")
