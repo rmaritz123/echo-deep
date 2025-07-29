@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 st.set_page_config(page_title="Echo Deep", layout="centered")
@@ -22,16 +21,17 @@ archetypes = {
 setting = st.selectbox("Choose Setting:", list(settings.keys()))
 selected_archetypes = st.multiselect("Choose Your Archetypes:", list(archetypes.keys()), default=list(archetypes.keys())[:3])
 
-# Background CSS
-bg_path = settings[setting]
+# Background CSS (Streamlit static path fix)
+bg_path = f"/{settings[setting]}"
 st.markdown(
-    f'''
+    f"""
     <style>
     .stApp {{
-        background-image: url('/{bg_path}');
+        background-image: url('{bg_path}');
         background-size: cover;
         background-position: center;
         background-attachment: fixed;
+        background-repeat: no-repeat;
         color: #f4ecd8;
         font-family: 'Georgia', serif;
     }}
@@ -47,7 +47,7 @@ st.markdown(
         margin-bottom: 1em;
     }}
     </style>
-    ''',
+    """,
     unsafe_allow_html=True
 )
 
